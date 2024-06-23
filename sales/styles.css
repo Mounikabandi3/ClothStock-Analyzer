@@ -1,0 +1,505 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+body.dashboard-page {
+    background-color: #fff; /* White background for dashboard page */
+    color: #000; /* Black text color */
+}
+.header {
+    background: url('../frontend/images/background.jpeg') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Ensure the background covers the full viewport */
+    z-index: -1; /* Send the header background behind the form */
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1; /* Ensure the form is above the background */
+}
+
+.form-container {
+    width: 350px;
+    padding: 30px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 2px solid #ffd700;
+}
+
+.form-container h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    color: #ffd700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ffd700;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+}
+
+form input[type="text"]::placeholder,
+form input[type="password"]::placeholder {
+    color: #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffd700;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #e6ac00;
+}
+
+.help-block {
+    color: red;
+    font-size: 0.875em;
+}
+
+
+/* dashboard css*/
+
+
+
+
+
+
+
+
+
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    background-color: #1a1a1a;
+    color: #fff; /* Default text color */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 3000px;
+}
+
+.content-container {
+    flex: 1;
+    padding: 200px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.content {
+    width: calc(100% - 250px); /* Subtract vertical navbar width from 100% */
+    height: calc(100vh - 100px); /* Example height calculation */
+    border: none; /* Remove border for iframe */
+}
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .vertical-navbar {
+        width: 100%;
+    }
+    
+    .horizontal-navbar {
+        width: 100%;
+    }
+    
+    .content-container {
+        margin-top: 20px;
+    }
+}
+/* Vertical Navbar styles */
+.vertical-navbar {
+    background-color: #1a1a1a;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100%;
+    overflow-y: auto;
+    text-align: center; /* Center align menu items */
+}
+
+.vertical-navbar .logo {
+    margin-bottom: 90px;
+    text-align: center;
+}
+
+.vertical-navbar .logo img {
+    width: 200px;
+    height: 100px;
+    margin-left: -50px;
+}
+
+.vertical-navbar .tagline {
+    color: gold;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+.vertical-navbar .menu-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px; /* Space above the menu items */
+    text-align: left;
+}
+
+.vertical-navbar .menu-items li {
+    margin-bottom: 15px;
+}
+
+.vertical-navbar .menu-items li a {
+    display: block;
+    color: gold;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s ease, border-radius 0.3s ease; 
+}
+
+/* Vertical Navbar hover effect */
+.vertical-navbar .menu-items li a:hover {
+    background-color: gold;
+    color: #1a1a1a;
+    border-radius: 20px; /* Adjust border-radius for rounded corners */
+}
+
+
+.vertical-navbar .menu-items li a i {
+    margin-right: 10px;
+}
+
+/* Horizontal Navbar styles */
+.horizontal-navbar {
+    background-color: #1a1a1a;
+    padding: 30px 20px;
+    position: fixed;
+    top: 0;
+    left: 200px; /* Adjust left position to match vertical navbar width */
+    width: calc(100% - 200px); /* Adjust width based on vertical navbar */
+    z-index: 1000; /* Ensure horizontal navbar stays above other content */
+    text-align: center; /* Center align menu items */
+}
+
+.horizontal-navbar .menu-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.horizontal-navbar .menu-items li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.horizontal-navbar .menu-items li a {
+    color: gold;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s ease, border-radius 0.3s ease;
+}
+
+
+/* Horizontal Navbar hover effect */
+.horizontal-navbar .menu-items li a:hover {
+    background-color: gold;
+    color: #1a1a1a;
+    border-radius: 20px; /* Adjust border-radius for rounded corners */
+}
+
+.horizontal-navbar .menu-items li a i {
+    margin-right: 5px;
+    color: gold;
+}
+
+/* Main Content Area styles */
+main {
+    margin-top: 100px; /* Adjust to accommodate fixed navbars */
+    padding: 20px;
+}
+
+main h1 {
+    color: gold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .vertical-navbar, .horizontal-navbar {
+        position: static;
+        width: 100%;
+        text-align: center;
+    }
+
+    .horizontal-navbar {
+        left: 0;
+    }
+}
+
+.vertical-navbar {
+    width: 250px; /* Example width */
+    /* Other styles */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* css for search bar*/
+
+
+/* Styles for the horizontal navbar and search form */
+.horizontal-navbar {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* Center align items */
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 600px;
+    padding: 12px 50px 12px 20px;
+    position: relative; /* Ensure proper positioning of the icon */
+}
+
+.search-input {
+    width: 600px; /* Increased width */
+    padding: 12px 50px 12px 20px; /* Adjust padding for more space and better appearance */
+    border: none;
+    border-radius: 4px;
+    margin-right: 10px; /* Reduced margin */
+    color: #1a1a1a;
+    background-color: white;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+.icon {
+    position: absolute;
+    right: 30px; /* Adjust position as needed */
+    color: #1a1a1a;
+}
+
+.search-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #1a1a1a;
+}
+
+.search-button:hover {
+    color: #ffd700; /* Gold */
+}
+
+
+
+
+/*child css*/
+
+
+/* General styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: #1a1a1a; /* Dark gray text */
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.header {
+    background-color: #e5e5e5 ; /* Dark background */
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.header-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: black;
+    margin-bottom: 10px;
+}
+
+.header-nav {
+margin-top: 10px;
+display: flex;
+justify-content: center; /* Center align the buttons */
+}
+
+.header-link {
+display: inline-block;
+color: white; /* Dark gray */
+text-decoration: none;
+padding: 10px 20px;
+margin: 0 10px;
+border-radius: 5px;
+background-color: #5c5c5c; /* White background */
+border: 2px solid #ffd700; /* Gold border */
+transition: background-color 0.3s ease, color 0.3s ease;
+flex: 1; /* Distribute available space equally */
+max-width: 650px; /* Max width to prevent excessive stretching */
+text-align: center; /* Center text */
+}
+.header-link:hover {
+    background-color: #ffd700; /* Gold */
+    color: #fff; /* White */
+}
+
+.content-section {
+    display: none;
+    margin-top: 20px;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: black; /* Gold */
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.items {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.item {
+    background-color: gold; /* Gold background */
+    padding: 10px 20px; /* Padding adjusted for button-like size */
+    border-radius: 30px; /* Rounded corners */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    text-align: center; /* Center text */
+    color: #1a1a1a; /* Dark gray text */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Font size */
+    font-weight: 600; /* Font weight */
+    max-width: 150px; /* Maximum width */
+    margin: 0 auto; /* Center horizontally */
+    text-decoration: none; /* Remove underline */
+}
+
+.item:hover {
+    transform: translateY(-5px); /* Lift on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Increased shadow on hover */
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .header-title {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .items {
+        flex-direction: column;
+    }
+
+    .item {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
