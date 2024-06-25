@@ -32,7 +32,6 @@
             width: 150px; /* Adjust as needed */
             height: 120px; /* Adjust as needed */
             border-radius: 50%;
-            padding:-50px;
         }
         
         .logo .tagline {
@@ -63,7 +62,6 @@
             border-radius: 20px;
         }
         
-
         /* Main content container */
         .main-content {
             display: flex;
@@ -124,9 +122,24 @@
                 <p class="tagline">Bandi Brothers</p>
             </div>
             <ul class="menu-items">
-            <li><a href="#" onclick="loadChildContent('child.php', 'children');"><i class="fas fa-child"></i> Children</a></li>
-        <li><a href="#" onclick="loadChildContent('child.php', 'gentlemen');"><i class="fas fa-male"></i> Gentlemen</a></li>
-        <li><a href="#" onclick="loadChildContent('child.php', 'ladies');"><i class="fas fa-female"></i> Ladies</a></li>
+                <li>
+                    <a href="#" onclick="loadChildContent('child.php?id=children-container')">
+                        <i class="fas fa-child" aria-hidden="true"></i>
+                        <span>Children</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="loadChildContent('child.php?id=gentlemen-container')">
+                        <i class="fas fa-male" aria-hidden="true"></i>
+                        <span>Gentlemen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="loadChildContent('child.php?id=ladies-container')">
+                        <i class="fas fa-female" aria-hidden="true"></i>
+                        <span>Ladies</span>
+                    </a>
+                </li>
             </ul>
         </nav>
         
@@ -151,10 +164,11 @@
 
     <!-- JavaScript to load content into iframe -->
     <script>
-        function loadChildContent(url) {
-            var iframe = document.getElementById('childFrame');
-            iframe.src = url;
-        }
+       function loadChildContent(url) {
+    // Append the iframe ID to the URL to load the correct section
+    document.getElementById('childFrame').src = `${url}&section=${url.split('=')[1]}`;
+}
+
     </script>
 </body>
 </html>

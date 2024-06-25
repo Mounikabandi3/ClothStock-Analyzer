@@ -100,7 +100,7 @@ $conn->close();
         .form-container {
             max-width: 500px;
             margin: 90px auto;
-            padding: 30px;
+            padding: 40px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
