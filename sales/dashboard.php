@@ -122,24 +122,9 @@
                 <p class="tagline">Bandi Brothers</p>
             </div>
             <ul class="menu-items">
-                <li>
-                    <a href="#" onclick="loadChildContent('child.php?id=children-container')">
-                        <i class="fas fa-child" aria-hidden="true"></i>
-                        <span>Children</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="loadChildContent('child.php?id=gentlemen-container')">
-                        <i class="fas fa-male" aria-hidden="true"></i>
-                        <span>Gentlemen</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="loadChildContent('child.php?id=ladies-container')">
-                        <i class="fas fa-female" aria-hidden="true"></i>
-                        <span>Ladies</span>
-                    </a>
-                </li>
+                <li><a href="#" onclick="loadChildContent('child.php?section=children');"><i class="fas fa-child"></i> Children</a></li>
+                <li><a href="#" onclick="loadChildContent('child.php?section=gentlemen');"><i class="fas fa-male"></i> Gentlemen</a></li>
+                <li><a href="#" onclick="loadChildContent('child.php?section=ladies');"><i class="fas fa-female"></i> Ladies</a></li>
             </ul>
         </nav>
         
@@ -150,7 +135,7 @@
                 <form action="#">
                     <div class="search-form">
                         <input type="text" placeholder="Search...">
-                        <i class='bx bx-search icon'></i>
+                        <i class="fas fa-search icon"></i>
                     </div>
                 </form>
             </header>
@@ -164,11 +149,11 @@
 
     <!-- JavaScript to load content into iframe -->
     <script>
-       function loadChildContent(url) {
-    // Append the iframe ID to the URL to load the correct section
-    document.getElementById('childFrame').src = `${url}&section=${url.split('=')[1]}`;
-}
-
+        function loadChildContent(url) {
+            var iframe = document.getElementById('childFrame');
+            console.log('Loading URL: ' + url); // Debugging line
+            iframe.src = url;
+        }
     </script>
 </body>
 </html>

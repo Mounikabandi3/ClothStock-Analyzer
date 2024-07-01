@@ -179,25 +179,24 @@
         <header class="header">
             <h3 class="header-title">Gentlemen's Section</h3>
             <nav class="header-nav">
-            <a href="?section=gentlemen-container" class="header-link active" data-section="gentlemen-shirts-section">SHIRTS</a>
-<a href="?section=gentlemen-container" class="header-link" data-section="gentlemen-pants-section">PANTS</a>
-
+                <a href="#" class="header-link active" data-section="gentlemen-shirts-section">SHIRTS</a>
+                <a href="#" class="header-link" data-section="gentlemen-pants-section">PANTS</a>
             </nav>
         </header>
 
         <section id="gentlemen-shirts-section" class="content-section active">
-            <h2 class="section-title">Gentlemen Shirts</h2>
+            <h2 class="section-title">Shirts</h2>
             <div class="items">
-                <a href="items.php?category=men-shirts" class="item">Shirts</a>
-                <a href="items.php?category=men-t_shirts" class="item">T-Shirts</a>
+                <a href="Gentlemen_items.php?category=men_shirts" class="item">Shirts</a>
+                <a href="Gentlemen_items.php?category=men_t_shirts" class="item">T-Shirts</a>
             </div>
         </section>
 
         <section id="gentlemen-pants-section" class="content-section">
-            <h2 class="section-title">Gentlemen Pants</h2>
+            <h2 class="section-title">Pants</h2>
             <div class="items">
-                <a href="items.php?category=men-pants" class="item">Pants</a>
-                <a href="items.php?category=men-trousers" class="item">Trousers</a>
+                <a href="Gentlemen_items.php?category=men_pants" class="item">Pants</a>
+                <a href="Gentlemen_items.php?category=men_trousers" class="item">Trousers</a>
             </div>
         </section>
     </div>
@@ -208,58 +207,75 @@
             <h3 class="header-title">Ladies Section</h3>
             <nav class="header-nav">
                 <a href="#" class="header-link active" data-section="ladies-dresses-section">DRESSES</a>
-                <a href="#" class="header-link" data-section="ladies-skirts-section">SKIRTS</a>
+                <a href="#" class="header-link" data-section="ladies-skirts-section">SAREES</a>
             </nav>
         </header>
 
         <section id="ladies-dresses-section" class="content-section active">
-            <h2 class="section-title">Ladies Dresses</h2>
+            <h2 class="section-title"> Dresses</h2>
             <div class="items">
-                <a href="items.php?category=women-dresses" class="item">Dresses</a>
-                <a href="items.php?category=women-blouses" class="item">Blouses</a>
+                <a href="Ladies_items.php?category=women_dresses" class="item">Dresses</a>
+                <a href="Ladies_items.php?category=women_leggings" class="item">Leggins</a>
+                <a href="Ladies_items.php?category=women_jeans" class="item">Jeans</a>
             </div>
         </section>
 
         <section id="ladies-skirts-section" class="content-section">
-            <h2 class="section-title">Ladies Skirts</h2>
+            <h2 class="section-title">Sarees</h2>
             <div class="items">
-                <a href="items.php?category=women-skirts" class="item">Skirts</a>
+                <a href="Ladies_items.php?category=women_sarees" class="item">Sarees</a>
+                <a href="Ladies_items.php?category=women_blouses" class="item">Blouses</a>
             </div>
         </section>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the section from the query string
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const section = urlParams.get('section');
 
-            if (section) {
-                const sections = document.querySelectorAll('.container');
-                sections.forEach(sec => {
-                    sec.style.display = 'none';
-                });
+            // Section containers
+            const childrenContainer = document.getElementById('children-container');
+            const gentlemenContainer = document.getElementById('gentlemen-container');
+            const ladiesContainer = document.getElementById('ladies-container');
 
-                const activeSection = document.getElementById(section);
-                if (activeSection) {
-                    activeSection.style.display = 'block';
-                }
+            // Show the correct container based on the 'section' parameter
+            if (section === 'children') {
+                childrenContainer.style.display = 'block';
+                gentlemenContainer.style.display = 'none';
+                ladiesContainer.style.display = 'none';
+            } else if (section === 'gentlemen') {
+                childrenContainer.style.display = 'none';
+                gentlemenContainer.style.display = 'block';
+                ladiesContainer.style.display = 'none';
+            } else if (section === 'ladies') {
+                childrenContainer.style.display = 'none';
+                gentlemenContainer.style.display = 'none';
+                ladiesContainer.style.display = 'block';
             }
 
+            // Add event listeners to header links for switching sections
             const headerLinks = document.querySelectorAll('.header-link');
             headerLinks.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
                     const targetSection = this.getAttribute('data-section');
 
-                    // Deactivate all header links and sections
-                    headerLinks.forEach(l => l.classList.remove('active'));
-                    const sections = document.querySelectorAll('.content-section');
-                    sections.forEach(s => s.classList.remove('active'));
+                    // Hide all content sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
 
-                    // Activate clicked header link and corresponding section
-                    this.classList.add('active');
+                    // Remove active class from all header links
+                    headerLinks.forEach(link => {
+                        link.classList.remove('active');
+                    });
+
+                    // Show the target section
                     document.getElementById(targetSection).classList.add('active');
+                    // Add active class to clicked link
+                    this.classList.add('active');
                 });
             });
         });

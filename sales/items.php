@@ -2,7 +2,7 @@
 include '../db.php'; // Include your database connection file
 
 // Retrieve category from GET parameter
-$category = $_GET['category'];
+$category = isset($_GET['category']) ? $_GET['category'] : '';
 
 // Handle form submission to add stock
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -35,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "Invalid category";
                         exit;
                 }
-
                 $sql = "INSERT INTO $table (cost_price, colour, size, image) VALUES ('$cost_price', '$colour', '$size', '$fileName')";
                 if ($conn->query($sql) === TRUE) {
                     header("Location: " . $_SERVER["PHP_SELF"] . "?category=$category&success=1");
@@ -100,7 +99,7 @@ $conn->close();
         .form-container {
             max-width: 500px;
             margin: 90px auto;
-            padding: 40px;
+            padding: 30px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -184,12 +183,12 @@ $conn->close();
             border-radius: 8px 8px 0 0;
         }
         .item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    background-color: #f7f7f7; /* add a light gray background on hover */
-    color: #333; /* change the text color to a darker gray on hover */
-}
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            background-color: #f7f7f7; /* add a light gray background on hover */
+            color: #333; /* change the text color to a darker gray on hover */
+        }
         .details {
             padding: 10px;
             font-size: 14px;
@@ -219,7 +218,7 @@ $conn->close();
 </head>
 <body>
 <div class="main-container">
-    <h2 style="color: #1a1a1a;"><?php echo ucfirst($category); ?> Stock</h2>
+    <h2><?php echo ucfirst($category); ?> Stock</h2>
 
     <div class="button-container">
         <button class="add-stock-btn">Add Stock</button>
@@ -227,7 +226,7 @@ $conn->close();
 
     <!-- Form container -->
     <div class="form-container" id="addStockForm">
-        <h2 style="color: #1a1a1a;">Add Stock - <?php echo ucfirst($category); ?></h2>
+        <h2>Add Stock - <?php echo ucfirst($category); ?></h2>
         <form action="" method="POST" enctype="multipart/form-data">
             <input type="number" name="cost_price" class="form-input" placeholder="Cost Price" required>
             <input type="text" name="colour" class="form-input" placeholder="Colour" required>
@@ -238,35 +237,44 @@ $conn->close();
     </div>
 
     <!-- Items container -->
-    <!-- Items container -->
-<div class="items-container">
-    <div class="items-grid">
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                ?>
-                <div class="item">
-                    <img src="./uploads/<?php echo $row['image'];?>" alt="Item Image">
-                    <div class="details">
-                        <p>Cost Price: <?php echo $row['cost_price'];?></p>
-                        <p>Colour: <?php echo $row['colour'];?></p>
-                        <p>Size: <?php echo $row['size'];?></p>
+    <div class="items-container">
+        <div class="items-grid">
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    ?>
+                    <div class="item">
+                        <img src="./uploads/<?php echo $row['image'];?>" alt="Item Image">
+                        <div class="details">
+                            <p>Cost Price: <?php echo $row['cost_price'];?></p>
+                            <p>Colour: <?php echo $row['colour'];?></p>
+                            <p>Size: <?php echo $row['size'];?></p>
+                        </div>
                     </div>
-                </div>
+                    <?php
+                }
+            } else {
+                ?>
+                <p style="text-align: center; font-size: 18px; color: #666;">No items are present. Click 'Add Stock' to add items.</p>
                 <?php
             }
-        } else {
             ?>
-            <p style="text-align: center; font-size: 18px; color: #666;">No items are present. Click "Add Stock" to add items.</p>
-            <?php
-        }
-        ?>
+        </div>
     </div>
+
+    <script>
+        const addStockBtn = document.querySelector('.add-stock-btn');
+        const addStockForm = document.getElementById('addStockForm');
+
+        addStockBtn.addEventListener('click', function() {
+            addStockForm.classList.toggle('active');
+            if (addStockForm.classList.contains('active')) {
+                addStockBtn.textContent = 'Items';
+            } else {
+                addStockBtn.textContent = 'Add Stock';
+            }
+        });
+    </script>
 </div>
-<script>
-    document.querySelector('.add-stock-btn').addEventListener('click', function() {
-        document.getElementById('addStockForm').classList.toggle('active');
-    });
-</script>
 </body>
 </html>
