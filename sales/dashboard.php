@@ -111,6 +111,25 @@
             height: calc(100vh - 80px); /* Adjust height based on the horizontal navbar height */
             border: none;
         }
+
+        /* Styles for sections */
+        .section {
+            display: none;
+            padding: 20px;
+        }
+
+        .section.active-section {
+            display: block;
+        }
+
+        /* Styles for search results */
+        #searchResults {
+            display: none;
+        }
+
+        #searchResults.active-section {
+            display: block;
+        }
     </style>
 </head>
 <body class="dashboard-page">
@@ -122,9 +141,9 @@
                 <p class="tagline">Bandi Brothers</p>
             </div>
             <ul class="menu-items">
-                <li><a href="#" onclick="loadChildContent('child.php?section=children');"><i class="fas fa-child"></i> Children</a></li>
-                <li><a href="#" onclick="loadChildContent('child.php?section=gentlemen');"><i class="fas fa-male"></i> Gentlemen</a></li>
-                <li><a href="#" onclick="loadChildContent('child.php?section=ladies');"><i class="fas fa-female"></i> Ladies</a></li>
+                <li><a href="#" onclick="toggleSection('children');"><i class="fas fa-child"></i> Children</a></li>
+                <li><a href="#" onclick="toggleSection('gentlemen');"><i class="fas fa-male"></i> Gentlemen</a></li>
+                <li><a href="#" onclick="toggleSection('ladies');"><i class="fas fa-female"></i> Ladies</a></li>
             </ul>
         </nav>
         
@@ -132,27 +151,74 @@
         <div class="main-content">
             <!-- Horizontal Navbar -->
             <header class="horizontal-navbar">
-                <form action="#">
+                <form id="searchForm" class="search-form">
                     <div class="search-form">
-                        <input type="text" placeholder="Search...">
-                        <i class="fas fa-search icon"></i>
+                        <input type="text" id="searchQuery" name="search_query" placeholder="Search by color, ID, or size...">
+                        <button type="submit"><i class="fas fa-search icon"></i></button>
                     </div>
                 </form>
             </header>
             
-            <!-- Content Container -->
-            <div class="container">
-                <iframe class="content" id="childFrame" frameborder="0"></iframe>
+            <!-- Content Containers for Sections and Search Results -->
+            <div id="childrenSection" class="section">
+                <iframe id="childrenFrame" class="content" frameborder="0"></iframe>
+            </div>
+            <div id="gentlemenSection" class="section">
+                <iframe id="gentlemenFrame" class="content" frameborder="0"></iframe>
+            </div>
+            <div id="ladiesSection" class="section">
+                <iframe id="ladiesFrame" class="content" frameborder="0"></iframe>
+            </div>
+            <div id="searchResults" class="section">
+                <!-- Search results will be dynamically loaded here -->
             </div>
         </div>
     </div>
 
-    <!-- JavaScript to load content into iframe -->
+    <!-- jQuery for AJAX -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        function loadChildContent(url) {
-            var iframe = document.getElementById('childFrame');
-            console.log('Loading URL: ' + url); // Debugging line
-            iframe.src = url;
+        $(document).ready(function() {
+            // Intercept form submission using jQuery
+            $('#searchForm').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                var searchQuery = $('#searchQuery').val(); // Get the search query from input
+
+                // AJAX request to fetch search results
+                $.ajax({
+                    type: 'GET',
+                    url: 'search.php', // PHP file to handle search
+                    data: {
+                        search_query: searchQuery
+                    },
+                    dataType: 'html', // Expect HTML response
+                    success: function(response) {
+                        // Hide all sections except search results
+                        $('.section').removeClass('active-section');
+                        $('#searchResults').addClass('active-section');
+
+                        // Update search results container
+                        $('#searchResults').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error); // Log any errors to console
+                    }
+                });
+            });
+        });
+
+        // Function to toggle between sections
+        function toggleSection(section) {
+            // Hide all sections
+            $('.section').removeClass('active-section');
+
+            // Show the selected section
+            $('#' + section + 'Section').addClass('active-section');
+
+            // Load content based on section
+            var iframeSrc = 'child.php?section=' + section;
+            $('#' + section + 'Frame').attr('src', iframeSrc);
         }
     </script>
 </body>

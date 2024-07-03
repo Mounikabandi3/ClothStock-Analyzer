@@ -116,7 +116,7 @@ $conn->close();
         }
         .form-input {
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
