@@ -154,7 +154,7 @@
                 <form id="searchForm" class="search-form">
                     <div class="search-form">
                         <input type="text" id="searchQuery" name="search_query" placeholder="Search by color, ID, or size...">
-                        <button type="submit"><i class="fas fa-search icon"></i></button>
+                       
                     </div>
                 </form>
             </header>

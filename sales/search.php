@@ -168,7 +168,7 @@
     ];
 
     // Columns to search in
-    $search_columns = ['id', 'cost_price', 'colour', 'size', 'image']; // Include 'image' column
+    $search_columns = ['id', 'cost_price', 'colour', 'size']; // Include 'image' column
 
     // Array to hold matched tables
     $matched_tables = [];

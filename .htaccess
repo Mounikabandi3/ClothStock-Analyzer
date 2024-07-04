@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /Stock_Project1/
+
+# Rewrite rule for accessing Admin/index.php with ID parameter
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/?$ Admin/index.php?id=$1 [L,QSA]

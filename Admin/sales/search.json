@@ -1,0 +1,134 @@
+[
+    {
+        "table_name": "members",
+        "id": "1",
+        "item_name": "",
+        "cost_price": "",
+        "colour": "",
+        "selling_price": "",
+        "profit": "",
+        "image": "",
+        "size": ""
+    },
+    {
+        "table_name": "men_shirts",
+        "id": "1",
+        "item_name": "",
+        "cost_price": "1000.00",
+        "colour": "hhh",
+        "selling_price": "0.00",
+        "profit": "0.00",
+        "image": "50days.png",
+        "size": "L"
+    },
+    {
+        "table_name": "men_t_shirts",
+        "id": "872310",
+        "item_name": "",
+        "cost_price": "1000.00",
+        "colour": "hhh",
+        "selling_price": "0.00",
+        "profit": "0.00",
+        "image": "day1.png",
+        "size": "L"
+    },
+    {
+        "table_name": "pants",
+        "id": "1",
+        "item_name": "",
+        "cost_price": "100.00",
+        "colour": "white",
+        "selling_price": "200.00",
+        "profit": "100.00",
+        "image": "asus.jpg",
+        "size": ""
+    },
+    {
+        "table_name": "pants",
+        "id": "2",
+        "item_name": "",
+        "cost_price": "1000.00",
+        "colour": "blue",
+        "selling_price": "0.00",
+        "profit": "-1000.00",
+        "image": "logo1.png",
+        "size": "M"
+    },
+    {
+        "table_name": "shirts",
+        "id": "1",
+        "item_name": "",
+        "cost_price": "1000.00",
+        "colour": "blue",
+        "selling_price": "1000.00",
+        "profit": "0.00",
+        "image": "Screenshot 2024-02-23 083155.png",
+        "size": ""
+    },
+    {
+        "table_name": "shirts",
+        "id": "2",
+        "item_name": "",
+        "cost_price": "500.00",
+        "colour": "pink",
+        "selling_price": "700.00",
+        "profit": "200.00",
+        "image": "Screenshot 2024-02-25 002301.png",
+        "size": ""
+    },
+    {
+        "table_name": "shirts",
+        "id": "3",
+        "item_name": "",
+        "cost_price": "500.00",
+        "colour": "pink",
+        "selling_price": "700.00",
+        "profit": "200.00",
+        "image": "Screenshot 2024-02-23 090348.png",
+        "size": ""
+    },
+    {
+        "table_name": "shirts",
+        "id": "819533",
+        "item_name": "",
+        "cost_price": "0.00",
+        "colour": "value-3",
+        "selling_price": "0.00",
+        "profit": "0.00",
+        "image": "value-6",
+        "size": ""
+    },
+    {
+        "table_name": "shirts",
+        "id": "819534",
+        "item_name": "",
+        "cost_price": "1000.00",
+        "colour": "kk",
+        "selling_price": "1500.00",
+        "profit": "500.00",
+        "image": "background-Photoroom.png",
+        "size": ""
+    },
+    {
+        "table_name": "shirts",
+        "id": "819535",
+        "item_name": "",
+        "cost_price": "100.00",
+        "colour": "mm",
+        "selling_price": "0.00",
+        "profit": "-100.00",
+        "image": "background.jpeg",
+        "size": ""
+    },
+    {
+        "table_name": "women_dresses",
+        "id": "1",
+        "item_name": "",
+        "cost_price": "1000.00",
+        "colour": "hhh",
+        "selling_price": "0.00",
+        "profit": "0.00",
+        "image": "ABC.png",
+        "size": "L"
+    }
+]
