@@ -156,7 +156,7 @@
 
     <?php
     // Include database connection
-    include '../db.php';
+    include '../../db.php'; 
 
     // Ensure search term is set
     $search_term = isset($_GET['search_query']) ? $_GET['search_query'] : '';

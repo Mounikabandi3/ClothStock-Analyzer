@@ -1,5 +1,5 @@
 <?php
-include '../db.php'; // Include your database connection file
+include '../../db.php'; // Include your database connection file
 
 // Retrieve category from GET parameter
 $category = isset($_GET['category']) ? $_GET['category'] : '';

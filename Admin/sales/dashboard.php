@@ -1,3 +1,14 @@
+<?php
+session_start(); // Start or resume session
+
+// Check if user is logged in or authorized (implement your own logic)
+if (!isset($_SESSION['admin'])) {
+    // Redirect or handle unauthorized access
+  
+}
+
+// HTML structure for your dashboard page
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,13 +133,25 @@
             display: block;
         }
 
-        /* Styles for search results */
-        #searchResults {
-            display: none;
+        .buttons {
+            display: flex;
+            gap: 10px;
         }
 
-        #searchResults.active-section {
-            display: block;
+        .approve, .ignore {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .approve {
+            background-color: green;
+            color: white;
+        }
+
+        .ignore {
+            background-color: red;
+            color: white;
         }
     </style>
 </head>
@@ -144,6 +167,7 @@
                 <li><a href="#" onclick="toggleSection('children');"><i class="fas fa-child"></i> Children</a></li>
                 <li><a href="#" onclick="toggleSection('gentlemen');"><i class="fas fa-male"></i> Gentlemen</a></li>
                 <li><a href="#" onclick="toggleSection('ladies');"><i class="fas fa-female"></i> Ladies</a></li>
+                <li><a href="#" onclick="toggleSection('requests');"><i class="fas fa-tasks"></i> Requests</a></li>
             </ul>
         </nav>
         
@@ -154,7 +178,6 @@
                 <form id="searchForm" class="search-form">
                     <div class="search-form">
                         <input type="text" id="searchQuery" name="search_query" placeholder="Search by color, ID, or size...">
-                       
                     </div>
                 </form>
             </header>
@@ -169,10 +192,34 @@
             <div id="ladiesSection" class="section">
                 <iframe id="ladiesFrame" class="content" frameborder="0"></iframe>
             </div>
+            <div id="requestsSection" class="section">
+                <div id="requestsContent">
+                    <!-- Requests content will be dynamically loaded here -->
+                </div>
+            </div>
             <div id="searchResults" class="section">
                 <!-- Search results will be dynamically loaded here -->
             </div>
         </div>
+        <div id="requestsSection" class="section">
+    <div id="requestsContent">
+        <!-- Already Approved Requests -->
+        <div id="approvedRequests">
+            <h2>Already Approved Requests</h2>
+            <ul id="approvedRequestsList" class="request-list">
+                <!-- Approved requests will be dynamically loaded here -->
+            </ul>
+        </div>
+
+        <!-- Pending Requests -->
+        <div id="pendingRequests">
+            <h2>Pending Requests</h2>
+            <ul id="pendingRequestsList" class="request-list">
+                <!-- Pending requests will be dynamically loaded here -->
+            </ul>
+        </div>
+    </div>
+</div>
     </div>
 
     <!-- jQuery for AJAX -->
@@ -183,7 +230,7 @@
             $('#searchForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
 
-                var searchQuery = $('#searchQuery').val(); // Get the search query from input
+                var searchQuery = $('#searchQuery').val().trim(); // Get the search query from input
 
                 // AJAX request to fetch search results
                 $.ajax({
@@ -206,19 +253,184 @@
                     }
                 });
             });
+
+            function loadRequests() {
+        // Fetch requests
+        $.ajax({
+            url: 'notify_admin.php', // Path to PHP handler script
+            method: 'POST',
+            dataType: 'json',
+            data: { action: 'fetch_requests' }, // Specify action to fetch requests
+            success: function(response) {
+                if (response.length > 0) {
+                    // Build HTML for requests list
+                    var requestHTML = '<ul class="request-list">';
+                    $.each(response, function(index, request) {
+            requestHTML += '<li>';
+            requestHTML += 'Staff login request for username: ' + request.username;
+            requestHTML += '<div class="buttons">';
+            requestHTML += '<button class="approve" onclick="approveRequest(\'' + request.username + '\')">Approve</button>';
+            requestHTML += '<button class="ignore" onclick="ignoreRequest(\'' + request.username + '\')">Ignore</button>';
+            requestHTML += '</div>';
+            requestHTML += '</li>';
+        });
+                    requestHTML += '</ul>';
+                    $('#requestsContent').html(requestHTML); // Display requests list
+                } else {
+                    // No requests available message
+                    $('#requestsContent').html('<p>No requests available.</p>');
+                }
+            },
+            error: function() {
+                // Error handling
+                $('#requestsContent').html('<p>Error loading requests.</p>');
+            }
+        });
+    }
+
+    // Call loadRequests() on document ready to load requests initially
+    loadRequests();
+
+     // Clear requests
+     function clearRequests() {
+                $.ajax({
+                    url: 'notify_admin.php',
+                    method: 'POST',
+                    data: { action: 'clear_requests' }, // Clear requests action
+                    success: function() {
+                        loadRequests(); // Refresh requests list
+                    },
+                    error: function() {
+                        console.error('Error clearing requests.');
+                    }
+                });
+            }
+
+            // Notify admin function
+            function notifyAdmin(username) {
+                $.ajax({
+                    url: 'notify_admin.php',
+                    method: 'POST',
+                    data: { action: 'notify_admin', username: username }, // Notify admin action
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.status === 'success') {
+                            console.log('Admin notified for login request: ' + username);
+                            // Optionally handle UI update or further actions upon success
+                        } else {
+                            console.error('Failed to notify admin.');
+                        }
+                    },
+                    error: function() {
+                        console.error('Error notifying admin.');
+                    }
+                });
+            }
+
+         
+            function approveRequest(username) {
+    $.ajax({
+        url: 'notify_admin.php',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            action: 'approve_request',
+            username: username
+        },
+        success: function(response) {
+            console.log('Response:', response); // Log response for debugging
+            if (response.status === 'success') {
+                console.log('Request approved successfully for username:', username);
+                alert('Request approved successfully.'); // Display success message
+                
+                // Optionally, update UI based on response
+                if (response.username && response.status === 'approved') {
+                    // Example: Update UI elements
+                    $('#approval_status').text('Approved for ' + response.username);
+                }
+            } else {
+                //alert('Error: ' + response.message); // Display error message
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error approving request:', error); // Log AJAX error
+           // alert('Error approving request. Please try again.'); // Display error message
+        }
+    });
+}
+
+
+// Function to ignore request
+function ignoreRequest(username) {
+    $.ajax({
+        url: 'notify_admin.php',
+        method: 'POST',
+        data: {
+            action: 'ignore_request',
+            username: username
+        },
+        success: function() {
+            console.log('Request ignored successfully for username:', username);
+            loadRequests(); // Refresh requests list after ignoring
+        },
+        error: function(xhr, status, error) {
+            console.error('Error ignoring request:', error); // Log AJAX error
+           // alert('Error ignoring request. Please try again.'); // Display error message
+        }
+    });
+}
+function checkApproval() {
+    $.ajax({
+        url: 'notify_admin.php',
+        type: 'POST',
+        data: { action: 'check_approval', username: username },
+        dataType: 'json',
+        success: function(response) {
+            console.log('Approval Check Response:', response);
+            if (response.status === 'success') {
+                var approvalStatus = response.approval_status;
+                if (approvalStatus === 'Approved') {
+                    //alert('Login request approved for ' + username);
+                    // Handle UI update or redirect as needed
+                } else if (approvalStatus === 'Pending') {
+                    console.log('Request still pending...');
+                    // Retry or continue checking
+                } else {
+                    console.error('Unknown approval status');
+                    // Handle other errors
+                }
+            } else {
+                console.error('Error:', response.message);
+                // Handle error responses
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+            // Handle AJAX error
+        }
+    });
+}
+
+
+            // Expose functions globally
+            window.approveRequest = approveRequest;
+            window.ignoreRequest = ignoreRequest;
+
+            // Call loadRequests initially
+            loadRequests();
         });
 
-        // Function to toggle between sections
-        function toggleSection(section) {
+        // Function to toggle sections
+        function toggleSection(sectionId) {
             // Hide all sections
             $('.section').removeClass('active-section');
 
             // Show the selected section
-            $('#' + section + 'Section').addClass('active-section');
+            $('#' + sectionId + 'Section').addClass('active-section');
 
-            // Load content based on section
-            var iframeSrc = 'child.php?section=' + section;
-            $('#' + section + 'Frame').attr('src', iframeSrc);
+            // Load the appropriate iframe content based on sectionId
+            var iframeSrc = 'child.php?section=' + sectionId;
+            $('#' + sectionId + 'Frame').attr('src', iframeSrc);
         }
     </script>
 </body>
