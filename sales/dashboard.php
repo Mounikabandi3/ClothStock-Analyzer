@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    // Redirect to login page if session is not set
+    header('Location: login.php');
+    exit();
+}
+$username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : 'Guest';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,9 +164,9 @@
                 <form id="searchForm" class="search-form">
                     <div class="search-form">
                         <input type="text" id="searchQuery" name="search_query" placeholder="Search by color, ID, or size...">
-                       
                     </div>
                 </form>
+                <button onclick="logout()">Logout</button>
             </header>
             
             <!-- Content Containers for Sections and Search Results -->
@@ -178,7 +188,7 @@
     <!-- jQuery for AJAX -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
+       $(document).ready(function() {
             // Intercept form submission using jQuery
             $('#searchForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
@@ -206,7 +216,65 @@
                     }
                 });
             });
+
+            // Periodically check for removal notification
+            setInterval(checkForRemoval, 5000); // Check every 5 seconds
         });
+
+        // Function to check removal status
+        function checkForRemoval() {
+            $.ajax({
+                url: '../Admin/sales/notify_admin.php',
+                type: 'POST',
+                data: {
+                    action: 'check_removal',
+                    username: 'staffusername' // Replace with the actual username
+                },
+                success: function(response) {
+                    console.log('Server Response:', response); // Log the response for debugging
+                    try {
+                        var data = JSON.parse(response);
+                        if (data.status === 'pending') {
+                            alert('Your access has been removed. You will be logged out.');
+                            window.location.href = 'login.php'; // Redirect to login page
+                        } else {
+                            console.log('User status:', data.status); // Log status for debugging
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e); // Log parsing errors
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error); // Log any AJAX errors
+                }
+            });
+        }
+
+        function logout() {
+            $.ajax({
+                url: '../Admin/sales/notify_admin.php',
+                type: 'POST',
+                data: {
+                    action: 'logout',
+                    username: 'staffusername' // Replace with the actual username
+                },
+                success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.status === 'success') {
+                        // Perform actions on successful logout
+                        alert('Logged out successfully');
+                        // Redirect to login or home page
+                        window.location.href = 'login.php'; // Adjust as needed
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error); // Log any errors to console
+                }
+            });
+            
+        }
 
         // Function to toggle between sections
         function toggleSection(section) {

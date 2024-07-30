@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (data.status === 'approved') {
                             console.log('Login approved. Redirecting to dashboard...');
                             window.location.href = 'dashboard.php';
-                        } else if (data.status === 'pending') {
+                        } else if (data.status === 'pending' ) {
                             console.log('Login pending. Waiting for approval...');
                             $('#loginForm').hide();
                             $('#waitContainer').show();
