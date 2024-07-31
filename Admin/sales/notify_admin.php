@@ -88,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Action: deny_request
-        elseif ($action === 'deny_request' && isset($_POST['username'])) {
+        // Action: ignore_request
+        elseif ($action === 'ignore_request' && isset($_POST['username'])) {
             $username = $_POST['username'];
 
             // Update status in members table
@@ -173,6 +173,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // Action: check_ignoral
+           elseif ($action === 'check_ignoral' && isset($_SESSION['login_request'])) {
+            $username = $_SESSION['login_request'];
+
+            // Check the approval status from the database
+            $sql = "SELECT status FROM members WHERE username = ?";
+            if ($stmt = $conn->prepare($sql)) {
+                $stmt->bind_param("s", $username);
+                if ($stmt->execute()) {
+                    $stmt->store_result();
+                    if ($stmt->num_rows == 1) {
+                        $stmt->bind_result($status);
+                        if ($stmt->fetch()) {
+                            if ($status === 'Denied') {
+                                echo json_encode(['status' => 'Denied', 'username' => $username]);
+                            } else {
+                                echo json_encode(['status' => 'pending', 'username' => $username]);
+                            }
+                        }
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'No login request found']);
+                    }
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to execute statement: ' . $stmt->error]);
+                }
+                $stmt->close();
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to prepare statement: ' . $conn->error]);
+            }
+        }
+
         // Action: fetch_approved_requests
         elseif ($action === 'fetch_approved_requests') {
             $sql = "SELECT username FROM members WHERE status = 'Approved'";
@@ -188,8 +219,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode($approvedRequests);
         }
 
-        // Action: check_removal
-        elseif ($action === 'check_removal' && isset($_SESSION['login_request'])) {
+          // Action: check_removal
+          elseif ($action === 'check_removal' && isset($_SESSION['login_request'])) {
             $username = $_SESSION['login_request'];
 
             $query = "SELECT status FROM members WHERE username = ?";
@@ -220,18 +251,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode($response);
         }
 
-
         // Action: remove_access
         elseif ($action === 'remove_access' && isset($_POST['username'])) {
             $username = $_POST['username'];
 
-            // Update status to 'removed'
+            // Remove access by updating status in the members table
             $sql = "UPDATE members SET status = 'pending' WHERE username = ?";
             if ($stmt = $conn->prepare($sql)) {
                 $stmt->bind_param("s", $username);
                 if ($stmt->execute()) {
                     $stmt->close();
-                    echo json_encode(['status' => 'success', 'message' => 'Access removed']);
+                    echo json_encode(['status' => 'success', 'message' => 'Access removed for ' . $username]);
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Failed to execute statement: ' . $stmt->error]);
                 }
@@ -242,23 +272,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Action: logout
         elseif ($action === 'logout') {
-             // Update status to 'pending'
-             $stmt = $conn->prepare("UPDATE members SET status = 'pending' WHERE username = ?");
-             $stmt->bind_param("s", $username);
- 
-             if ($stmt->execute()) {
-                 // Destroy the session
-                 session_destroy();
-                 echo json_encode(['status' => 'success', 'message' => 'Status set to pending and logged out successfully']);
-             } else {
-                 echo json_encode(['status' => 'error', 'message' => $stmt->error]);
-             }
- 
-             $stmt->close();
-             $conn->close();
-         } else {
-             echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
-         }
+            if (isset($_SESSION['username'])) {
+                $username = $_SESSION['username'];
+        
+                // Prepare and execute the SQL statement
+                $stmt = $conn->prepare("UPDATE members SET status = 'pending' WHERE username = ?");
+                $stmt->bind_param("s", $username);
+        
+                if ($stmt->execute()) {
+                    // Destroy the session
+                    session_destroy();
+                    echo json_encode(['status' => 'success', 'message' => 'Status set to pending and logged out successfully']);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to update status']);
+                }
+        
+                $stmt->close();
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'No user logged in']);
+            }
         }
     }
-
+}
+?>

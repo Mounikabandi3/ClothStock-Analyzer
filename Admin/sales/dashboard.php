@@ -329,7 +329,7 @@ $(document).ready(function() {
                     loadRequests(); // Reload requests after approving
                     loadApprovedRequests(); // Reload approved requests after approving
                 } else {
-                    alert('Failed to approve request.');
+                   // alert('Failed to approve request.');
                 }
             },
             error: function(xhr, status, error) {
@@ -353,7 +353,7 @@ $(document).ready(function() {
                     alert('Request ignored.');
                     loadRequests(); // Reload requests after ignoring
                 } else {
-                    alert('Failed to ignore request.');
+                    //alert('Failed to ignore request.');
                 }
             },
             error: function(xhr, status, error) {
@@ -377,7 +377,7 @@ $(document).ready(function() {
                     alert('Approved request removed.');
                     loadApprovedRequests(); // Reload approved requests after removal
                 } else {
-                    alert('Failed to remove approved request.');
+                    //alert('Failed to remove approved request.');
                 }
             },
             error: function(xhr, status, error) {

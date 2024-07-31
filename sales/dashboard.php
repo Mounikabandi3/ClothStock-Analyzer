@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit();
 }
-$username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : 'Guest';
+$username = $_SESSION['username'];
 ?>
 
 <!DOCTYPE html>
@@ -188,7 +188,10 @@ $username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : 'Gu
     <!-- jQuery for AJAX -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-       $(document).ready(function() {
+        // Pass PHP variable to JavaScript
+        var username = "<?php echo $username; ?>";
+
+        $(document).ready(function() {
             // Intercept form submission using jQuery
             $('#searchForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
@@ -228,7 +231,7 @@ $username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : 'Gu
                 type: 'POST',
                 data: {
                     action: 'check_removal',
-                    username: 'staffusername' // Replace with the actual username
+                    username: username // Use the JavaScript variable
                 },
                 success: function(response) {
                     console.log('Server Response:', response); // Log the response for debugging
@@ -256,7 +259,7 @@ $username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : 'Gu
                 type: 'POST',
                 data: {
                     action: 'logout',
-                    username: 'staffusername' // Replace with the actual username
+                    username: username // Use the JavaScript variable
                 },
                 success: function(response) {
                     var result = JSON.parse(response);
@@ -273,7 +276,6 @@ $username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : 'Gu
                     console.error('Error:', error); // Log any errors to console
                 }
             });
-            
         }
 
         // Function to toggle between sections

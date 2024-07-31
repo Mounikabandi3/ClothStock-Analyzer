@@ -142,6 +142,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $('#loginForm').hide();
                             $('#waitContainer').show();
                             checkApproval(data.username); // Check for approval periodically
+                            checkIgnoral(data.username);
+
                         } else {
                             // Handle errors or other cases
                             if (data.username_err) {
@@ -172,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $.ajax({
                     url: '../Admin/sales/notify_admin.php',
                     method: 'POST',
-                    data: { action: 'check_approval', username: username },
+                    data: { action: 'check_approval',  username: 'staffusername' },
                     success: function(response) {
                         try {
                             var data = JSON.parse(response);
@@ -202,7 +204,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 });
             }, 5000); // Check every 5 seconds
         }
-    });
+    
+     // Check every 5 seconds
+     // Function to check ignoral status
+     function checkIgnoral(username) {
+        setTimeout(function() {
+            $.ajax({
+                url: '../Admin/sales/notify_admin.php',
+                type: 'POST',
+                data: { action: 'check_ignoral',  username: 'staffusername' },
+                
+                success: function(response) {
+                    try {
+                        var data = JSON.parse(response);
+                        console.log('ignoral Check Response:', data);
+                        if (data.status === 'Denied') {
+                            alert('Your login request has been denied.');
+                            window.location.href = 'login.php';
+                        } else if (data.status === 'pending') {
+                            checkIgnoral(username);
+                        } else {
+                            console.log('Error:', data.message);
+                        }
+                    } catch (e) {
+                        console.error('JSON Parse Error:', e);
+                        console.log('Response:', response);
+                        console.log('Retrying ignoral check in 5 seconds...');
+                        checkIgnoral(username);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                    console.log('XHR Object:', xhr);
+                    checkIgnoral(username);
+                }
+            });
+        }, 5000);
+    }
+
+   
+});
     </script>
 </body>
 </html>
